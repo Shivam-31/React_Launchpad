@@ -1,32 +1,70 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext.jsx'
 
 export default function Header() {
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
+
     return (
         <header className="shadow sticky z-50 top-0">
             <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                    {/* Logo */}
                     <Link to="/" className="flex items-center">
-                        <img
-                            src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
-                            className="mr-3 h-12"
-                            alt="Logo"
-                        />
+                        <span className="text-2xl font-bold text-orange-600 tracking-wide">
+                            DevCollab
+                        </span>
                     </Link>
+
+                    {/* Right Side - Auth Buttons */}
                     <div className="flex items-center lg:order-2">
-                        <Link
-                            to="#"
-                            className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                        >
-                            Log in
-                        </Link>
-                        <Link
-                            to="#"
-                            className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                        >
-                            Get started
-                        </Link>
+                        {user ? (
+                            // ✅ LOGGED IN - Show User Name + Logout
+                            <>
+                                <span className="text-gray-700 mr-3 font-medium">
+                                    👋 {user.name}
+                                </span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 focus:outline-none"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            // ❌ LOGGED OUT - Show Login + Register
+                            <>
+                                <NavLink
+                                    to="/login"
+                                    className={({ isActive }) =>
+                                        `text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none ${
+                                            isActive ? "text-orange-700" : ""
+                                        }`
+                                    }
+                                >
+                                    Log in
+                                </NavLink>
+                                <NavLink
+                                    to="/register"
+                                    className={({ isActive }) =>
+                                        `text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 focus:outline-none ${
+                                            isActive ? "bg-orange-900" : ""
+                                        }`
+                                    }
+                                >
+                                    Get started
+                                </NavLink>
+                            </>
+                        )}
                     </div>
+
+                    {/* Navigation Links */}
                     <div
                         className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
                         id="mobile-menu-2"
@@ -36,17 +74,21 @@ export default function Header() {
                                 <NavLink
                                     to="/"
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 ${
+                                            isActive ? "text-orange-700" : "text-gray-700"
+                                        } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                                     }
                                 >
                                     Home
                                 </NavLink>
                             </li>
-                             <li>
+                            <li>
                                 <NavLink
                                     to="/about"
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 ${
+                                            isActive ? "text-orange-700" : "text-gray-700"
+                                        } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                                     }
                                 >
                                     About
@@ -56,24 +98,56 @@ export default function Header() {
                                 <NavLink
                                     to="/contact"
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 ${
+                                            isActive ? "text-orange-700" : "text-gray-700"
+                                        } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                                     }
                                 >
-                                    Contact 
+                                    Contact
                                 </NavLink>
                             </li>
-                             <li>
+                            <li>
                                 <NavLink
                                     to="/github"
                                     className={({ isActive }) =>
-                                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                        `block py-2 pr-4 pl-3 duration-200 ${
+                                            isActive ? "text-orange-700" : "text-gray-700"
+                                        } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                                     }
                                 >
                                     Github
                                 </NavLink>
                             </li>
-                            
-                            
+
+                            {/* 🔥 LOGGED IN - Extra Links */}
+                            {user && (
+                                <>
+                                    <li>
+                                        <NavLink
+                                            to="/projects"
+                                            className={({ isActive }) =>
+                                                `block py-2 pr-4 pl-3 duration-200 ${
+                                                    isActive ? "text-orange-700" : "text-gray-700"
+                                                } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                            }
+                                        >
+                                            Projects
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to="/create-project"
+                                            className={({ isActive }) =>
+                                                `block py-2 pr-4 pl-3 duration-200 ${
+                                                    isActive ? "text-orange-700" : "text-gray-700"
+                                                } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                                            }
+                                        >
+                                            + New Project
+                                        </NavLink>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>
@@ -81,4 +155,3 @@ export default function Header() {
         </header>
     );
 }
-
